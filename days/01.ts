@@ -14,10 +14,9 @@ export async function solve() {
   list2.sort((a, b) => a - b);
 
   const distance = solveDistance(list1, list2);
-  console.log("Distance", distance);
-
   const similarity = solveSimilarity(list1, list2);
-  console.log("Similarity", similarity)
+
+  return [distance, similarity]
 }
 
 function solveDistance(list1: number[], list2: number[]): number {

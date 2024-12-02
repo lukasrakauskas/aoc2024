@@ -1,3 +1,3 @@
-import { solve } from "./days/01.ts";
+import { runSolveForAllFiles } from "./utils.ts";
 
-await solve()
+runSolveForAllFiles('days')

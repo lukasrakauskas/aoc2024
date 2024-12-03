@@ -19,7 +19,7 @@ export async function solve() {
   return [safeCount, safeDampenedCount];
 }
 
-function isSafeReport(report: number[]): boolean {
+export function isSafeReport(report: number[]): boolean {
   const sign = Math.sign(report[1] - report[0]);
 
   for (let i = 1; i < report.length; i++) {
@@ -37,23 +37,14 @@ function isSafeReport(report: number[]): boolean {
   return true;
 }
 
-function isSafeReportWithDampener(report: number[]): boolean {
-  const sign = Math.sign(report[1] - report[0]);
-  let count = 0;
+export function isSafeReportWithDampener(report: number[]): boolean {
+  for (let i = 0; i < report.length; i++) {
+    const removed = [...report.slice(0, i), ...report.slice(i + 1)];
 
-  for (let i = 1; i < report.length; i++) {
-    const diff = report[i] - report[i - 1];
-
-    if (Math.sign(diff) != sign) {
-      return false;
-    }
-
-    if (count > 1) return false;
-
-    if (![1, 2, 3].includes(Math.abs(diff))) {
-      count++;
+    if (isSafeReport(removed)) {
+      return true;
     }
   }
 
-  return true;
+  return false;
 }

@@ -1,5 +1,10 @@
 export async function solve() {
   const data = await Deno.readTextFile("inputs/04.txt");
+
+  return [solveXmas(data), solveXShapedMas(data)];
+}
+
+function solveXmas(data: string) {
   const matrix = data.replaceAll("\r", "").split("\n").map((line) =>
     line.split("")
   );
@@ -19,7 +24,7 @@ export async function solve() {
       line,
     ) => line.join("")).join("\n");
 
-  const count = findOverlappingMatches(
+  return findOverlappingMatches(
     [
       data,
       rotatedData,
@@ -28,8 +33,49 @@ export async function solve() {
     ].join("\n"),
     KEYWORD,
   );
+}
 
-  return [count];
+function solveXShapedMas(data: string): number {
+  const lines = data.replaceAll("\r", "").split("\n");
+  let count = 0;
+
+  for (let i = 1; i < lines.length - 1; i++) {
+    for (let j = 1; j < lines[i].length - 1; j++) {
+      const element = lines[i][j];
+
+      if (element === "A" && verifyShape(lines, i, j)) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
+function verifyShape(lines: string[], x: number, y: number): boolean {
+  const top = [lines[x - 1][y - 1], lines[x - 1][y + 1]].join("");
+  const bottom = [lines[x + 1][y - 1], lines[x + 1][y + 1]].join("");
+
+  if (top === "SS" && bottom === "MM") {
+    return true;
+  }
+
+  if (top === "MM" && bottom === "SS") {
+    return true;
+  }
+
+  const left = [lines[x - 1][y - 1], lines[x + 1][y - 1]].join("");
+  const right = [lines[x - 1][y + 1], lines[x + 1][y + 1]].join("");
+
+  if (left === "SS" && right === "MM") {
+    return true;
+  }
+
+  if (left === "MM" && right === "SS") {
+    return true;
+  }
+
+  return false;
 }
 
 function rotateMatrix<T>(matrix: T[][]): T[][] {

@@ -7,7 +7,7 @@ export async function* readInputLines(input: string) {
   const file = await Deno.open(filePath, { read: true });
   const stream = file.readable
     .pipeThrough(new TextDecoderStream())
-    .pipeThrough(new TextLineStream())
+    .pipeThrough(new TextLineStream());
 
   try {
     for await (const line of stream) {
@@ -36,10 +36,10 @@ export async function runSolveForAllFiles(directory: string) {
         const module = await import(`file://${filePath}`);
 
         // Check if solve function exists
-        if (typeof module.solve === 'function') {
-          console.time(dirEntry.name)
+        if (typeof module.solve === "function") {
+          console.time(dirEntry.name);
           const result = await module.solve();
-          console.timeEnd(dirEntry.name)
+          console.timeEnd(dirEntry.name);
           console.log(`Result:`, result);
         }
       } catch (error) {
@@ -47,4 +47,23 @@ export async function runSolveForAllFiles(directory: string) {
       }
     }
   }
+}
+
+export function sum(array: number[]) {
+  return array.reduce((x, y) => x + y, 0);
+}
+
+/**
+ * Returns two arrays separated on predicate, first is truthy, second - falsy
+ */
+export function separate<T>(array: T[], predicate: (value: T) => boolean) {
+  const truthy: T[] = [];
+  const falsy: T[] = [];
+
+  for (const element of array) {
+    const output = predicate(element) ? truthy : falsy;
+    output.push(element);
+  }
+
+  return [truthy, falsy] as const;
 }

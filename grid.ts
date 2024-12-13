@@ -57,6 +57,10 @@ export function addPoints([lx, ly]: Point, [rx, ry]: Point): Point {
   return [lx + rx, ly + ry];
 }
 
+export function subtractPoints([lx, ly]: Point, [rx, ry]: Point): Point {
+  return [lx - rx, ly - ry];
+}
+
 export function printGrid(grid: Grid<unknown>) {
   return grid.map((it) => it.join("")).join("\n");
 }
